@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://dvd2ds3pfvxfc"]
+
+[ext_resource type="Texture2D" uid="uid://ddyopu5aomx53" path="res://assets/images/astronaut4.png" id="2_b3h88"]
+
+[sub_resource type="GDScript" id="GDScript_f5u6j"]
+script/source = "extends CharacterBody2D
+
+const SPEED = 130.0
+const JUMP_VELOCITY = -300.0
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+
+
+@onready var astronautSprite = $\"./AstronautSprite\"
+@onready var starting_planet = $\"../StartingPlanet\"
+@onready var planet_gravity_area_2d = $\"../StartingPlanet/PlanetGravityArea2D\"
+
+
+func _physics_process(delta):
+	# Add the gravity.
+
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction = Input.get_axis(\"ui_left\", \"ui_right\")
+	if direction:
+		velocity.x = direction * SPEED
+		if direction == 1:
+			astronautSprite.flip_h = false
+		elif direction == -1:
+			astronautSprite.flip_h = true
+
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
+
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18hy3"]
+atlas = ExtResource("2_b3h88")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwy1i"]
+atlas = ExtResource("2_b3h88")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1up5n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18hy3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwy1i")
+}],
+"loop": true,
+"name": &"IdleFacingRight",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_me8le"]
+size = Vector2(18, 31)
+
+[node name="Astronaut" type="CharacterBody2D"]
+collision_layer = 2
+script = SubResource("GDScript_f5u6j")
+
+[node name="AstronautSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -257)
+sprite_frames = SubResource("SpriteFrames_1up5n")
+animation = &"IdleFacingRight"
+autoplay = "IdleFacingRight"
+frame_progress = 0.513926
+speed_scale = 0.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -257.5)
+shape = SubResource("RectangleShape2D_me8le")

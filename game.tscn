@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://bud7j16wxj0bj"]
+
+[ext_resource type="Texture2D" uid="uid://2enhl37sbemm" path="res://assets/images/Lunar_03-512x512.png" id="1_2geu1"]
+[ext_resource type="Texture2D" uid="uid://dd7jpmyybo7d8" path="res://assets/images/home_dome.png" id="2_fnyoa"]
+[ext_resource type="PackedScene" uid="uid://dvd2ds3pfvxfc" path="res://astronaut.tscn" id="4_gfvvy"]
+[ext_resource type="Texture2D" uid="uid://djcmwo6ge6qar" path="res://assets/images/spaceship_02.png" id="5_2f7ow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tikav"]
+radius = 420.233
+
+[sub_resource type="TileSet" id="TileSet_5mqd0"]
+
+[node name="OuterSpaceGamePart" type="Node2D"]
+
+[node name="StartingPlanet" type="Node2D" parent="."]
+
+[node name="Lunar03-512x512" type="Sprite2D" parent="StartingPlanet"]
+texture_filter = 1
+position = Vector2(1, 0)
+texture = ExtResource("1_2geu1")
+
+[node name="Sprite2D" type="Sprite2D" parent="StartingPlanet"]
+show_behind_parent = true
+texture_filter = 1
+position = Vector2(6, -249)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_fnyoa")
+
+[node name="PlanetGravityArea2D" type="Area2D" parent="StartingPlanet"]
+priority = 5
+gravity_space_override = 3
+gravity_point = true
+gravity = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StartingPlanet/PlanetGravityArea2D"]
+shape = SubResource("CircleShape2D_tikav")
+
+[node name="InitialSpaceShip" type="Node2D" parent="."]
+position = Vector2(-4, 253)
+rotation = 3.14159
+
+[node name="InitialSpaceShipSprite" type="Sprite2D" parent="InitialSpaceShip"]
+texture = ExtResource("5_2f7ow")
+
+[node name="Astronaut" parent="." instance=ExtResource("4_gfvvy")]
+
+[node name="Camera2D" type="Camera2D" parent="Astronaut"]
+position = Vector2(2, -272)
+scale = Vector2(0.5, 0.5)
+zoom = Vector2(4, 4)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Astronaut/Camera2D"]
+offset_left = -148.0
+offset_top = -160.0
+offset_right = 164.0
+offset_bottom = -120.0
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_5mqd0")
+format = 2
+
+[node name="Node" type="Node" parent="."]
